@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Booking.Shared\Booking.Shared.csproj" />
+      <ProjectReference Include="..\..\..\shared\Booking.Shared\Booking.Shared.csproj" />
       <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
     </ItemGroup>
 
