@@ -1,3 +1,4 @@
+using Booking.Shared.Api;
 using Booking.Shared.Infrastructure.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Profile.Api.Consumers;
@@ -17,6 +18,8 @@ builder.Services.AddRabbitMq();
 builder.Services.AddScoped<UserCreatedConsumer>();
 builder.Services.AddHostedService<UserCreatedConsumerHostedService>();
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddDbContext<ProfileDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("ProfileDatabase"));
@@ -38,6 +41,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
+
+app.UseExceptionHandler();
 app.MapControllers();
 
 app.Run();

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Booking.Shared.Identity;
-using Identity.Infrastructure.Options;
+using Booking.Shared.Identity.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -72,6 +72,7 @@ public class KeycloakAdminTokenService : IKeycloakAdminTokenService
             var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponse>() 
                                 ?? throw new Exception("Cannot deserialize token response");
 
+            _logger.LogInformation("Fetched admin token successfully {Token}", tokenResponse.AccessToken);
             return tokenResponse.AccessToken;
         }
         catch (Exception ex)

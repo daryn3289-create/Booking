@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityService", "Identity
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Client", "services\IdentityService\Identity.Client\Identity.Client.csproj", "{24051059-3CE5-49EA-AE29-0A7E4A959547}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "services\IdentityService\Identity.Infrastructure\Identity.Infrastructure.csproj", "{E8E4B251-DB68-4DEE-9997-446489313460}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "services\IdentityService\Identity.Application\Identity.Application.csproj", "{5CEBDB3E-A94D-4607-9DE6-66166796AE2D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "services\IdentityService\Identity.Api\Identity.Api.csproj", "{E7C96AB7-D6FD-4C88-8620-092942613B77}"
@@ -23,6 +21,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{28334A94-4C6B-4EFD-9069-66C9FE5C063E}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
+		realms\booking.json = realms\booking.json
+		realms\master.json = realms\master.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HotelCatalogService", "HotelCatalogService", "{34E12DB4-0C50-4FB4-AD9C-5DFA10664526}"
@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Gateway", "gateway\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelCatalog.Api", "services\HotelCatalogService\HotelCatalog.Api\HotelCatalog.Api.csproj", "{65F1D5D8-4ADD-452D-9B23-9F64B3F0C2AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Tests", "tests\Booking.Tests\Booking.Tests.csproj", "{A3FB29F7-5F3D-45AA-BA6D-7037CADC112E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,7 +56,6 @@ Global
 		{BC5852EF-74BC-47FE-82F9-ABE2E78C930B} = {1C7599A4-37B2-4F48-B42E-5617B5C35C3F}
 		{DA3D79AB-4317-47E2-A565-DE365AD3A28E} = {5FE7054D-F614-4DD9-974C-4B43C1AD57DD}
 		{24051059-3CE5-49EA-AE29-0A7E4A959547} = {DA3D79AB-4317-47E2-A565-DE365AD3A28E}
-		{E8E4B251-DB68-4DEE-9997-446489313460} = {DA3D79AB-4317-47E2-A565-DE365AD3A28E}
 		{5CEBDB3E-A94D-4607-9DE6-66166796AE2D} = {DA3D79AB-4317-47E2-A565-DE365AD3A28E}
 		{E7C96AB7-D6FD-4C88-8620-092942613B77} = {DA3D79AB-4317-47E2-A565-DE365AD3A28E}
 		{34E12DB4-0C50-4FB4-AD9C-5DFA10664526} = {5FE7054D-F614-4DD9-974C-4B43C1AD57DD}
@@ -67,6 +68,7 @@ Global
 		{80EE9A3B-8ACD-48B2-8068-3E499621F1C8} = {F4B16548-BAB2-4847-9802-9ACDA1507AE0}
 		{A4E28F9D-C39E-4FC1-BF22-F37ABCAFD91D} = {BCCA64C8-A4F1-4728-93DA-E185D3F9CD59}
 		{65F1D5D8-4ADD-452D-9B23-9F64B3F0C2AA} = {34E12DB4-0C50-4FB4-AD9C-5DFA10664526}
+		{A3FB29F7-5F3D-45AA-BA6D-7037CADC112E} = {D657BEF7-9D9F-4159-86A3-F712E621703D}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BC5852EF-74BC-47FE-82F9-ABE2E78C930B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,10 +79,6 @@ Global
 		{24051059-3CE5-49EA-AE29-0A7E4A959547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24051059-3CE5-49EA-AE29-0A7E4A959547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24051059-3CE5-49EA-AE29-0A7E4A959547}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8E4B251-DB68-4DEE-9997-446489313460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8E4B251-DB68-4DEE-9997-446489313460}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8E4B251-DB68-4DEE-9997-446489313460}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8E4B251-DB68-4DEE-9997-446489313460}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5CEBDB3E-A94D-4607-9DE6-66166796AE2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CEBDB3E-A94D-4607-9DE6-66166796AE2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CEBDB3E-A94D-4607-9DE6-66166796AE2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -121,5 +119,9 @@ Global
 		{65F1D5D8-4ADD-452D-9B23-9F64B3F0C2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65F1D5D8-4ADD-452D-9B23-9F64B3F0C2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65F1D5D8-4ADD-452D-9B23-9F64B3F0C2AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FB29F7-5F3D-45AA-BA6D-7037CADC112E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FB29F7-5F3D-45AA-BA6D-7037CADC112E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FB29F7-5F3D-45AA-BA6D-7037CADC112E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FB29F7-5F3D-45AA-BA6D-7037CADC112E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

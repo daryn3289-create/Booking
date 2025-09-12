@@ -2,11 +2,13 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Booking.Shared.Common;
 using Booking.Shared.Identity;
 using Booking.Shared.Identity.Generated;
+using Booking.Shared.Identity.Options;
 using Booking.Shared.Infrastructure.Messaging;
 using Booking.Shared.Infrastructure.Messaging.Contracts;
-using Identity.Infrastructure.Options;
+using Duende.IdentityModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -17,6 +19,9 @@ public interface IKeycloakAuthClient
 {
    Task<TokenResponse> AuthorizeAsync(string username, string password, CancellationToken cancellationToken);
    Task CreateUserAsync(string username, string email, string password, string firstName, string lastName, CancellationToken cancellationToken);
+
+   Task<IEnumerable<object>> GetUsersAsync(KeycloakUserFilter filter,
+      CancellationToken cancellationToken);
 }
 
 public class KeycloakAuthClient : IKeycloakAuthClient
@@ -90,7 +95,7 @@ public class KeycloakAuthClient : IKeycloakAuthClient
    {
       try
       {
-         var user = new KeycloakCreateUserRequest
+         var user = new UserRepresentation
          {
             Username = username,
             Email = email,
@@ -100,7 +105,10 @@ public class KeycloakAuthClient : IKeycloakAuthClient
             EmailVerified = false,
             Credentials =
             [
-               new KeycloakCredential(type: "password", value: password, temporary: false)
+               new CredentialRepresentation(
+                  type: OidcConstants.GrantTypes.Password,
+                  value: password,
+                  temporary: false)
             ]
          };
       
@@ -175,36 +183,46 @@ public class KeycloakAuthClient : IKeycloakAuthClient
       await ResetPasswordAsync(userId, newPassword, cancellationToken);
    }
 
-   public async Task<ICollection<UserRepresentation>> GetUsersAsync(KeycloakUserFilter filter, CancellationToken cancellationToken)
+   public async Task<IEnumerable<object>> GetUsersAsync(KeycloakUserFilter filter, CancellationToken cancellationToken)
    {
-      var first = filter is { Page: not null, PageSize: not null }
-         ? (filter.Page.Value - 1) * filter.PageSize.Value
-         : (int?)null;
+      var first = (filter.Page - 1) * filter.PageSize;
       var max = filter.PageSize;
 
       var users = await _generatedExternalApiClient.UsersAll3Async(
          briefRepresentation: null,
          email: filter.Email,
-         emailVerified: null,
-         enabled: null,
+         emailVerified: filter.EmailVerified,
+         enabled: filter.Enabled,
          exact: null,
          first: first,
-         firstName: null,
+         firstName: filter.FirstName,
          idpAlias: null,
          idpUserId: null,
-         lastName: null,
+         lastName: filter.LastName,
          max: max,
          q: null,
-         search: filter.Query,
+         search: filter.Search,
          username: null,
          realm: _keycloakOptions.Realm,
          cancellationToken: cancellationToken
       );
 
-      return users;
+      var result = users.Select(x => new
+      {
+         x.Username,
+         x.Email,
+         x.FirstName,
+         x.LastName,
+         x.EmailVerified,
+         x.Enabled,
+         x.Attributes,
+         x.Self
+      });
+      
+      return result;
    }
    
-   public async Task<UserRepresentation?> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
+   public async Task<Booking.Shared.Identity.Generated.UserRepresentation?> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
    {
       return await _generatedExternalApiClient.UsersGET2Async(null, _keycloakOptions.Realm, userId, cancellationToken: cancellationToken);
    }
@@ -243,7 +261,7 @@ public class KeycloakAuthClient : IKeycloakAuthClient
       if(user is null)
          throw new InvalidOperationException($"User with ID '{userId}' not found.");
 
-      var credentialRepresentation = new CredentialRepresentation
+      var credentialRepresentation = new Booking.Shared.Identity.Generated.CredentialRepresentation
       {
          Type = "password",
          Value = newPassword,
@@ -331,7 +349,7 @@ public class KeycloakAuthClient : IKeycloakAuthClient
 }
 
 
-public record KeycloakCreateUserRequest
+public record UserRepresentation
 {
    [JsonPropertyName("username")]
    public string Username { get; set; }
@@ -346,11 +364,12 @@ public record KeycloakCreateUserRequest
    [JsonPropertyName("emailVerified")]
    public bool EmailVerified { get; set; }
    [JsonPropertyName("credentials")]
-   public List<KeycloakCredential> Credentials { get; set; }
+   public List<CredentialRepresentation> Credentials { get; set; }
 }
-public record KeycloakCredential
+
+public record CredentialRepresentation
 {
-   public KeycloakCredential(string type, string value, bool temporary)
+   public CredentialRepresentation(string type, string value, bool temporary)
    {
       Type = type;
       Value = value;
@@ -363,11 +382,4 @@ public record KeycloakCredential
    public string Value { get; set; }
    [JsonPropertyName("temporary")]
    public bool Temporary { get; set; }
-}
-public record KeycloakUserFilter
-{
-   public string? Email { get; set; }
-   public string? Query { get; set; }
-   public int? Page { get; set; }
-   public int? PageSize { get; set; }
 }

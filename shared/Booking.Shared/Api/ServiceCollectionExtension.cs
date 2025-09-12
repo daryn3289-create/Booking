@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Booking.Shared.Application;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Api.Controllers;
 
-public class AuthorizationController : BaseController
+public class AuthorizationController(IHttpContextAccessor httpContextAccessor) : BaseController
 {
     [HttpPost("authorize")]
     public async Task<IActionResult> Authorize(
@@ -14,6 +14,9 @@ public class AuthorizationController : BaseController
         CancellationToken cancellationToken)
     {
         var tokenResponse = await handler.Handle(command, cancellationToken);
+        
+        httpContextAccessor.HttpContext!.Response.Cookies.Append("access_token", tokenResponse.AccessToken);
+        
         return Ok(tokenResponse);
     }
 

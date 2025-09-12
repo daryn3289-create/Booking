@@ -29,20 +29,20 @@
     environment:
       - ASPNETCORE_URLS=http://+:5002  
 
-  booking.gateway:
-    image: booking.gateway
-    build:
-      context: .
-      dockerfile: gateway/Booking.Gateway/Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - identity.api
-      - profile.api
-      - keycloak
-      - hotel-catalog.api
-    environment:
-      - ASPNETCORE_URLS=http://+:80
+#  booking.gateway:
+#    image: booking.gateway
+#    build:
+#      context: .
+#      dockerfile: gateway/Booking.Gateway/Dockerfile
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - identity.api
+#      - profile.api
+#      - keycloak
+#      - hotel-catalog.api
+#    environment:
+#      - ASPNETCORE_URLS=http://+:80
   
   keycloak:
     container_name: keycloak
@@ -58,11 +58,16 @@
       KC_DB_URL_DATABASE: booking
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
-    command: start-dev
+      KC_RUN_IN_CONTAINER: true
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+    command: >
+      start-dev
+      --import-realm
     depends_on:
       - postgres
     volumes:
-      - keycloak_data:/opt/keycloak/data
+      - ./realms:/opt/keycloak/data/import
 
   postgres:
     image: postgres:latest
@@ -115,7 +120,6 @@
       - mailhog_data:/data
 
 volumes:
-  keycloak_data:
   postgres_data:
   pgadmin_data:
   rabbitmq_data:  

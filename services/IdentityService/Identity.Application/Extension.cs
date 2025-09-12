@@ -1,8 +1,8 @@
 ﻿using Booking.Shared.Api;
 using Booking.Shared.Identity.Generated;
+using Booking.Shared.Identity.Options;
 using Booking.Shared.Infrastructure.Messaging;
 using Identity.Client;
-using Identity.Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

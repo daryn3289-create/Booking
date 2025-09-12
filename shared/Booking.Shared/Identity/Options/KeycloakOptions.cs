@@ -1,4 +1,4 @@
-﻿namespace Identity.Infrastructure.Options;
+﻿namespace Booking.Shared.Identity.Options;
 
 public class KeycloakOptions
 {
