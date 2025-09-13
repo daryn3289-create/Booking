@@ -5,6 +5,9 @@ namespace HotelCatalog.Domain;
 
 public class Hotel : BaseEntity<int>
 {
+    public Hotel()
+    {
+    }
     public int OwnerId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -36,8 +39,12 @@ public class Hotel : BaseEntity<int>
         => new(ownerId, name, description, address, rating, status);
 }
 
-public class HotelDetailsReadModel
+public class HotelDetailsReadModel : BaseEntity<int>
 {
+    public HotelDetailsReadModel()
+    {
+    }
+    
     public int HotelId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -49,7 +56,7 @@ public class HotelDetailsReadModel
     public List<RoomReadModel> Rooms { get; set; } = new();
 }
 
-public class RoomReadModel
+public class RoomReadModel : BaseEntity<int>
 {
     public int RoomId { get; set; }
     public string Name { get; set; }

@@ -4,6 +4,7 @@ using Identity.Api;
 using Identity.Application;
 using Microsoft.AspNetCore.CookiePolicy;
 using Scalar.AspNetCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddOpenApi();
+
+builder.AddLogger();
 
 builder.AddKeycloakAuthentication(builder.Configuration);
 builder.Services.AddApplication();
@@ -38,5 +41,6 @@ app.UseCookiePolicy(new CookiePolicyOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSerilogRequestLogging();
 app.MapControllers();
 app.Run();

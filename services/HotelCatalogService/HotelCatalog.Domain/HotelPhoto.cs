@@ -4,6 +4,9 @@ namespace HotelCatalog.Domain;
 
 public class HotelPhoto : BaseEntity<int>
 {
+    public HotelPhoto()
+    {
+    }
     public int HotelId { get; set; }
     public string Url { get; set; }
 

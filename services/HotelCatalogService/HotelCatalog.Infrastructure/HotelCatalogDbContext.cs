@@ -24,4 +24,6 @@ public class HotelCatalogDbContext : DbContext
     public DbSet<Hotel> Hotels { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<HotelPhoto> HotelPhotos { get; set; }
+    public DbSet<HotelDetailsReadModel> HotelDetailsReadModels { get; set; }
+    public DbSet<RoomReadModel> RoomReadModels { get; set; }
 }

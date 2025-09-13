@@ -4,6 +4,9 @@ namespace HotelCatalog.Domain;
 
 public class Room : BaseEntity<int>
 {
+    public Room()
+    {
+    }
     public int HotelId { get; set; }
     public RoomType RoomType { get; set; }
     public int Capacity { get; set; }
